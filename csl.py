@@ -7,6 +7,7 @@ class AVLNode:
         self.nome = nome
         self.data = data
         self.horario = horario
+        self.estado = False
         self.left = None
         self.right = None
         self.height = 1
@@ -181,20 +182,26 @@ def update_event():
     print(f'O evento {nome} não foi encontrado.')
 
 
+def complete_event():
+    nome = input('Digite o nome do evento que deseja concluir: ')
+    event = agenda.root
+    while event:
+        if event.nome == nome:
+            event.estado = True
+            print(f'Evento {nome} concluido com sucesso.')
+            return
+        elif nome < event.nome:
+            event = event.left
+        else:
+            event = event.right
+
+    print(f'O evento {nome} não foi encontrado.')
+
+
 def delete_event():
     nome = input('Digite o nome do evento que deseja deletar: ')
     agenda.delete(nome)
     print(f'Evento {nome} deletado com sucesso.')
-
-
-def filter_events_today():
-    current_date = date.today().strftime("%d-%m-%Y")
-    filter_events_today_helper(agenda.root, current_date)
-
-
-def filter_events_today():
-    current_date = date.today().strftime('%d/%m/%Y')
-    filter_events_today_helper(agenda.root, current_date)
 
 
 def filter_events_today():
@@ -204,11 +211,12 @@ def filter_events_today():
     events.sort(key=lambda event: event.horario)
 
     for event in events:
-        print('x' * 24)
-        print(f'|    Nome: {event.nome}')
-        print(f'|    Data: {event.data}')
-        print(f'|    Horário: {event.horario}')
-        print('x' * 24)
+        if (event.estado == False):
+            print('x' * 24)
+            print(f'|    Nome: {event.nome}')
+            print(f'|    Data: {event.data}')
+            print(f'|    Horário: {event.horario}')
+            print('x' * 24)
 
 
 def filter_events_today_helper(node, current_date, events):
@@ -232,11 +240,12 @@ def show_all_events_helper(node):
         return
 
     show_all_events_helper(node.left)
-    print('x' * 24)
-    print(f'|    Nome: {node.nome}')
-    print(f'|    Data: {node.data}')
-    print(f'|    Horário: {node.horario}')
-    print('x' * 24)
+    print(f'x' * 24 +
+          f'\n|    Nome: {node.nome}'
+          f'\n|    Data: {node.data}'
+          f'\n|    Horário: {node.horario}'
+          f'\n|    Estado: {node.estado}\n'
+          + 'x' * 24)
     show_all_events_helper(node.right)
 
 
@@ -245,8 +254,9 @@ def optionmains():
           '\n[2 - Buscar Evento       ]'
           '\n[3 - Atualizar Evento    ]'
           '\n[4 - Deletar Evento      ]'
-          '\n[5 - Eventos para Hoje   ]'
-          '\n[6 - Todos os Eventos    ]')
+          '\n[5 - Concluir Evento     ]'
+          '\n[6 - Eventos para Hoje   ]'
+          '\n[7 - Todos os Eventos    ]')
 
 
 def options_menu(option: int):
@@ -263,9 +273,12 @@ def options_menu(option: int):
         delete_event()
         time.sleep(2)
     elif option == 5:
-        filter_events_today()
+        complete_event()
         time.sleep(2)
     elif option == 6:
+        filter_events_today()
+        time.sleep(2)
+    elif option == 7:
         show_all_events()
         time.sleep(2)
     else:

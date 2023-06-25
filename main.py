@@ -6,9 +6,3 @@ while True:
     print('<>' * 13)
     opmain = int(input('Opção: '))
     modelers.options_menu(opmain)
-
-
-
-
-
-
