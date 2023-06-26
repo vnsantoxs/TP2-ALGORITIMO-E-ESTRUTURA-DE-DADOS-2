@@ -111,7 +111,7 @@ class AVLTree:
         return self._get_height(root.left) - self._get_height(root.right)
 
     def _rotate_left(self, z):
-        y = z.right
+        y = z.rightmodelers
         T2 = y.left
 
         y.left = z
